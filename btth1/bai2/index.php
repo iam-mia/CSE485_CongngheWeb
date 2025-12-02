@@ -19,9 +19,8 @@ if (isset($_POST['upload'])) {
             $D = isset($lines[4]) ? substr($lines[4], 3) : '';
 
             // Chèn vào DB
-            $stmt = $conn->prepare("INSERT INTO quiz_questions(question, optionA, optionB, optionC, optionD) VALUES (?, ?, ?, ?, ?)");
-            $stmt->bind_param("sssss", $question, $A, $B, $C, $D);
-            $stmt->execute();
+            $stmt = $pdo->prepare("INSERT INTO quiz_questions(question, optionA, optionB, optionC, optionD) VALUES (?, ?, ?, ?, ?)");
+            $stmt->execute([$question, $A, $B, $C, $D]);
         }
 
         echo "<p class='text-success'>Upload Quiz.txt thành công!</p>";
@@ -30,54 +29,56 @@ if (isset($_POST['upload'])) {
     }
 }
 
-
-$questions = $conn->query("SELECT * FROM quiz_questions")->fetch_all(MYSQLI_ASSOC);
+$questions = $pdo->query("SELECT * FROM quiz_questions")->fetchAll();
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <title>Bài 2</title>
 </head>
+
 <body>
-<div class="container">
+    <div class="container">
 
-<h1>Quiz</h1>
+        <h1>Quiz</h1>
 
-<form method="POST" enctype="multipart/form-data" class="mb-4">
-    <input type="file" name="quiz" required class="form-control mb-2">
-    <button name="upload" class="btn btn-success">Upload Quiz</button>
-</form>
+        <form method="POST" enctype="multipart/form-data" class="mb-4">
+            <input type="file" name="quiz" required class="form-control mb-2">
+            <button name="upload" class="btn btn-success">Upload Quiz</button>
+        </form>
 
-<form method="POST">
-<?php foreach($questions as $index => $q): ?>
-<div class="mb-3 p-3 border rounded">
-    <h5><?= ($index+1) . ". " . htmlspecialchars($q['question']) ?></h5>
-    <div class="form-check">
-        <input class="form-check-input" type="radio" name="q<?= $index ?>" value="A" id="q<?= $index ?>a">
-        <label class="form-check-label" for="q<?= $index ?>a"><?= 'A. ' . htmlspecialchars($q['optionA']) ?></label>
-    </div>
-    <div class="form-check">
-        <input class="form-check-input" type="radio" name="q<?= $index ?>" value="B" id="q<?= $index ?>b">
-        <label class="form-check-label" for="q<?= $index ?>b"><?= 'B. ' . htmlspecialchars($q['optionB']) ?></label>
-    </div>
-    <div class="form-check">
-        <input class="form-check-input" type="radio" name="q<?= $index ?>" value="C" id="q<?= $index ?>c">
-        <label class="form-check-label" for="q<?= $index ?>c"><?= 'C. ' . htmlspecialchars($q['optionC']) ?></label>
-    </div>
-    <div class="form-check">
-        <input class="form-check-input" type="radio" name="q<?= $index ?>" value="D" id="q<?= $index ?>d">
-        <label class="form-check-label" for="q<?= $index ?>d"><?= 'D. ' . htmlspecialchars($q['optionD']) ?></label>
-    </div>
-</div>
-<?php endforeach; ?>
+        <form method="POST">
+            <?php foreach ($questions as $index => $q): ?>
+                <div class="mb-3 p-3 border rounded">
+                    <h5><?= ($index + 1) . ". " . htmlspecialchars($q['question']) ?></h5>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="q<?= $index ?>" value="A" id="q<?= $index ?>a">
+                        <label class="form-check-label" for="q<?= $index ?>a"><?= 'A. ' . htmlspecialchars($q['optionA']) ?></label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="q<?= $index ?>" value="B" id="q<?= $index ?>b">
+                        <label class="form-check-label" for="q<?= $index ?>b"><?= 'B. ' . htmlspecialchars($q['optionB']) ?></label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="q<?= $index ?>" value="C" id="q<?= $index ?>c">
+                        <label class="form-check-label" for="q<?= $index ?>c"><?= 'C. ' . htmlspecialchars($q['optionC']) ?></label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="q<?= $index ?>" value="D" id="q<?= $index ?>d">
+                        <label class="form-check-label" for="q<?= $index ?>d"><?= 'D. ' . htmlspecialchars($q['optionD']) ?></label>
+                    </div>
+                </div>
+            <?php endforeach; ?>
 
-<button type="submit" class="btn btn-primary">Nộp bài</button>
-</form>
-</div>
+            <button type="submit" class="btn btn-primary">Nộp bài</button>
+        </form>
+    </div>
 
 </body>
+
 </html>

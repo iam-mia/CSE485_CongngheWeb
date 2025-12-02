@@ -4,10 +4,12 @@ $user = "root";
 $pass = "";
 $dbname = "btth1";
 
-$conn = new mysqli($host, $user, $pass, $dbname);
-$conn->set_charset("utf8");
-
-if ($conn->connect_error) {
-    die("Kết nối thất bại: " . $conn->connect_error);
+$dsn = "mysql:host=$host;dbname=$dbname;charset=utf8mb4";
+$options = [
+    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+];
+try {
+    $pdo = new PDO($dsn, $user, $pass, $options);
+} catch (\PDOException $e) {
+    die("Kết nối thất bại" . $e->getMessage());
 }
-?>
