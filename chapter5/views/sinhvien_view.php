@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>PHT Chương 5 - MVC</title>
+    <title>PHT Chương 8 - ELOQUENT ORM</title>
     <style>
         table {
             width: 100%;
